@@ -3,12 +3,10 @@
 ## USER:
 `/wigellrepairs`
 
-### Get services:
-### [GET]
+### Get services: [GET]
 `/services`
 
-### Booking:
-### [POST]
+### Booking: [POST]
 `/bookservice`
 ```json
 {
@@ -29,6 +27,10 @@
 
 ### Get bookings: [GET]
 `/mybookings`
+
+
+
+
 
 ## Admin:
 `/wigellrepairs`
@@ -95,8 +97,8 @@
 > [!IMPORTANT]
 > Requires `docker` and `docker-buildx`
 
-e.g `./dockbuild.sh -rn services-network -p 5555 -N wigellrepairs`
 > [!INFO]
+>`$ ./dockbuild.sh -rn services-network -p 5555 -N wigellrepairs`
 ```
  Options:
  -i <name>                 image name, if left out: prints name of current dir
