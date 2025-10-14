@@ -30,7 +30,7 @@ public class DTOMapperServiceImpl implements DTOMapperService {
             service.getId(),
             service.getName(),
             sek,
-            currencyService.convert(sek, "SEK", "EUR"),
+            currencyService.getConversion(sek, "SEK", "EUR"),
             service.getCategory()
         );
 	}
@@ -42,7 +42,7 @@ public class DTOMapperServiceImpl implements DTOMapperService {
             service.getId(),
             service.getName(),
             sek,
-            currencyService.convert(sek, "SEK", "EUR"),
+            currencyService.getConversion(sek, "SEK", "EUR"),
             service.getCategory(),
             toTechnicianListDTO(service.getTechnicians())
         );
@@ -67,7 +67,7 @@ public class DTOMapperServiceImpl implements DTOMapperService {
             ticket.getDate(),
             ticket.isCanceled(),
             sek,
-            currencyService.convert(sek, "SEK", "EUR"),
+            currencyService.getConversion(sek, "SEK", "EUR"),
             service
         );
 	}

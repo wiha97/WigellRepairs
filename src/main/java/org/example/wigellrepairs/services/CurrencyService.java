@@ -1,10 +1,9 @@
+
 package org.example.wigellrepairs.services;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -25,58 +24,46 @@ public class CurrencyService {
     /// https://www.exchangerate-api.com
     ///
 
-    private final LoggerService loggerService;
-
-    @Autowired
-    public CurrencyService(LoggerService loggerService){
-        this.loggerService = loggerService;
-    }
-
-    @Value("${conversion.api}")
-    private String apiUrl;
-
     private String result = "";
-    private String from = "SEK";
-    private String convertTo = "EUR";
     private String apiUri = "https://open.er-api.com/v6/latest/";
 
-    public Double getConversion(Double price) {
+    public double getConversion(double price, String base, String convertTo) {
 
         //  Kollar ifall det redan finns data och hur gammal den är
         //  Förhindrar ratelimiting
+        if(!result.isEmpty())
+            System.out.println(getNode().findValue("base_code").toString().replace("\"",""));
         if(result.isEmpty()
-            || getNode().findValue("time_next_update_unix").asLong() < LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)){
-            result = getFromAPI();
+            || getNode().findValue("time_next_update_unix").asLong() < LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
+            || !getNode().findValue("base_code").toString().replace("\"", "").equals(base)){
+            result = getFromAPI(base);
+            System.out.println("Rates By Exchange Rate API: https://www.exchangerate-api.com");
         } else {
-            loggerService.info("Using stored data, next update: "+getNode().findValue("time_next_update_unix"));
+            System.out.println("Using cached data");
         }
 
-        double value = price * getNode().findValue(convertTo).asDouble();
+        double rate = getNode().findValue(convertTo).asDouble();
+        double value = price * rate;
+
+        value = Math.round(value * 100.0) / 100.0;
+        System.out.println("Converting from " + base + " to " + convertTo);
         System.out.println(String.format("Converted price = %.2f %s", value, convertTo));
 
         return value;
     }
 
-    public double convert(double price, String base, String rate){
-        String url = String.format("%s/%s/%s/%s", apiUrl, price, base, rate);
-
-        RestTemplate template = new RestTemplate();
-        ResponseEntity<Double> responseEntity = template.getForEntity(url, Double.class);
-
-        return responseEntity.getBody();
-    }
-
-    private String getFromAPI(){
-        String uri = apiUri + from;
+    private String getFromAPI(String base){
+        String uri = apiUri + base;
         RestTemplate template = new RestTemplate();
 
-        // Måste skicka "application/json" i en header, annars får vi SOAP svar
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", "application/json");
         HttpEntity<String> entity = new HttpEntity<String>(headers);
         ResponseEntity<String> responseEntity = template.exchange(uri, HttpMethod.GET, entity, String.class);
 
         String response = responseEntity.getBody();
+
+        // System.out.println(response);
 
         return response.toString();
     }
@@ -87,9 +74,9 @@ public class CurrencyService {
             ObjectMapper mapper = new ObjectMapper();
             node = mapper.readTree(result.toString());
         } catch (JsonMappingException jsonMappingException) {
-            loggerService.error(jsonMappingException.getMessage());
+            System.out.println(jsonMappingException);
         } catch (JsonProcessingException jsonProcessingException){
-            loggerService.error(jsonProcessingException.getMessage());
+            System.out.println(jsonProcessingException);
         }
         return node;
     }
