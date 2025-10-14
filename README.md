@@ -19,8 +19,7 @@
 }
 ```
 
-### Cancel:
-### [PUT]
+### Cancel: [PUT]
 `/cancelbooking`
 ```json
 {
@@ -28,31 +27,25 @@
 }
 ```
 
-### Get bookings:
-### [GET]
+### Get bookings: [GET]
 `/mybookings`
 
 ## Admin:
 `/wigellrepairs`
 
-### List Canceled:
-### [GET]
+### List Canceled: [GET]
 `/listcanceled`
 
-### List Upcoming:
-### [GET]
+### List Upcoming: [GET]
 `/listupcoming`
 
-### List Past:
-### [GET]
+### List Past: [GET]
 `/listpast`
 
-### List technicians:
-### [GET]
+### List technicians: [GET]
 `/technicians`
 
-### Add service:
-### [POST]
+### Add service: [POST]
 `/addservice`
 ```json
 {
@@ -67,8 +60,7 @@
 }
 ```
 
-### Update service:
-### [PUT]
+### Update service: [PUT]
 `/updateservice`
 ```json
 {
@@ -84,12 +76,10 @@
 }
 ```
 
-### Remove service:
-### [DELETE]
+### Remove service: [DELETE]
 `/remservice/<id>`
 
-### Add technician:
-### [POST]
+### Add technician: [POST]
 `/addtechnician`
 ```json
 {
@@ -98,22 +88,23 @@
 }
 ```
 
-### List technicians:
-### [GET]
+### List technicians: [GET]
 `/technicians`
 
 ## dockbuild.sh
 > [!IMPORTANT]
-> Requires `docker` and `docker buildx`
+> Requires `docker` and `docker-buildx`
 
 e.g `./dockbuild.sh -rn services-network -p 5555 -N wigellrepairs`
 > [!INFO]
->  Options:
->  -i <name>                 image name, if left out: prints name of current dir
->  -t <testing>              tag, if left out: "latest"
->  -s <dir>                  source, if left out: "."
->  -r                        Run after successful build
->  -d                        Run in background (detach)
->  -n <network>              Network name
->  -N <name>                 instance name
->  -p <port>/<local>:<cont>  Port
+```
+ Options:
+ -i <name>                 image name, if left out: prints name of current dir
+ -t <testing>              tag, if left out: "latest"
+ -s <dir>                  source, if left out: "."
+ -r                        Run after successful build
+ -d                        Run in background (detach)
+ -n <network>              Network name
+ -N <name>                 instance name
+ -p <port>/<local>:<cont>  Port
+```
