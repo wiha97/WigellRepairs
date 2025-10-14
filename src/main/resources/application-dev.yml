@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/servicedb"
+    data: testing.sql
+  jpa:
+    hibernate:
+      ddl-auto: "create"
+
+conversion:
+  api: http://convrt:8069/convert

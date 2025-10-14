@@ -1,0 +1,32 @@
+server:
+  port: 5555
+  error:
+    include-message: always
+    include-stacktrace: never
+spring:
+  application:
+    name: WigellRepairs
+  profiles:
+    active: dev
+  datasource:
+    username: "myuser"
+    password: "mypassword"
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
+  jpa:
+    hibernate:
+      ddl-auto: "create"
+    show-sql: false
+
+# conversion:
+#   api: http://convrt:8069/convert
+
+# logging:
+#   file:
+#     name: /logs/app.log
+#   level:
+#     root: INFO
+#   loggers:
+#     functionality:
+#       file: /logs/func.log
+#     errors:
+#       file: /logs/error.log
