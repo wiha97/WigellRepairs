@@ -64,6 +64,7 @@ public class ServiceTypeServiceImpl implements ServiceTypeService {
         Checker.lengthCheck(dto.getName(), MAX_NAME_LENGTH, "Name");
         Checker.valueCheck(dto.getSek(), "sek");
         Checker.valueCheck(dto.getCategory(), "category");
+        Checker.valueCheck(dto.getTechnician(), "technicians");
 
         ServiceType service = new ServiceType();
         service.setName(dto.getName());

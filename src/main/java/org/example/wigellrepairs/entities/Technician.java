@@ -1,11 +1,6 @@
 package org.example.wigellrepairs.entities;
 
-import java.util.List;
-
 import org.example.wigellrepairs.enums.Expertise;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -24,17 +19,6 @@ public class Technician {
     @Enumerated(EnumType.STRING)
     private Expertise expertise;
 
-    // @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    // @JoinColumn(name = "service_id", nullable = true)
-    // @ManyToMany
-    // @JoinTable(name = "tech_service", joinColumns = @JoinColumn(name = "service_id"),
-    //     inverseJoinColumns = @JoinColumn(name = "tech_id"))
-    // private ServiceType service;
-
-	// @OneToMany(mappedBy = "technician", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-	//    @JsonIgnoreProperties("technician")
-	//    private List<RepairTicket> repairTickets;
-
 	public Technician() {
     }
 
@@ -50,22 +34,6 @@ public class Technician {
     public void setExpertise(Expertise expertise) {
 		this.expertise = expertise;
 	}
-
-	// public List<RepairTicket> getRepairTickets() {
-	// 	return repairTickets;
-	// }
-	//
-	// public void setRepairTickets(List<RepairTicket> repairTickets) {
-	// 	this.repairTickets = repairTickets;
-	// }
-
-	// public ServiceType getService() {
-	// 	return service;
-	// }
-	//
-	// public void setService(ServiceType service) {
-	// 	this.service = service;
-	// }
 
 	public Long getId() {
 		return id;

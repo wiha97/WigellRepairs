@@ -1,10 +1,6 @@
 package org.example.wigellrepairs.dtos.services;
 
 import java.io.Serializable;
-import java.util.List;
-
-import org.example.wigellrepairs.dtos.technicians.ShowTechnicianDTO;
-import org.example.wigellrepairs.entities.ServiceType;
 import org.example.wigellrepairs.enums.Expertise;
 
 public class ShowServiceTypeDTO implements Serializable {

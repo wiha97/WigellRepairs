@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.example.wigellrepairs.deserializers.ExpertiseDeserializer;
-import org.example.wigellrepairs.dtos.technicians.CreateTechnicianDTO;
 import org.example.wigellrepairs.dtos.technicians.MinimalTechnicianDTO;
 import org.example.wigellrepairs.enums.Expertise;
 

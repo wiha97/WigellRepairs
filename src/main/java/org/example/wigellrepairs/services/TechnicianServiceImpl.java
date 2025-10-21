@@ -1,6 +1,5 @@
 package org.example.wigellrepairs.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.example.wigellrepairs.dtos.technicians.CreateTechnicianDTO;
@@ -18,21 +17,25 @@ public class TechnicianServiceImpl implements TechnicianService {
 
     private final TechnicianRepo techRepo;
     private final DTOMapperService mapperService;
+    private final LoggerService loggerService;
 
     private final int MAX_NAME_LENGTH = 25;
 
     @Autowired
-    public TechnicianServiceImpl(TechnicianRepo techRepo, DTOMapperService mapperService){
+    public TechnicianServiceImpl(TechnicianRepo techRepo, DTOMapperService mapperService, LoggerService loggerService){
         this.techRepo = techRepo;
         this.mapperService = mapperService;
+        this.loggerService = loggerService;
     }
 
 	@Override
 	public ShowTechnicianDTO addTechnician(CreateTechnicianDTO dto) {
         Checker.valueCheck(dto.getName(), "name");
         String name = dto.getName();
-        if(techRepo.existsByNameIgnoreCase(name))
+        if(techRepo.existsByNameIgnoreCase(name)) {
+            loggerService.error("Failed to add technician with existing name: " + name);
             throw new ResourceExistsException("Technician", "name", name);
+        }
 
         Checker.lengthCheck(dto.getName(), MAX_NAME_LENGTH, "Name");
         Checker.valueCheck(dto.getExpertise(), "expertise");
@@ -44,19 +47,14 @@ public class TechnicianServiceImpl implements TechnicianService {
 
         techRepo.save(technician);
 
+        loggerService.info("Added new technician: " + technician.getName());
+
         return mapperService.toTechnicianDTO(technician);
 	}
 
 	@Override
 	public List<ShowTechnicianDTO> getTechnicians() {
-        List<ShowTechnicianDTO> showListDtos = new ArrayList<>();
-        for(Technician tech : techRepo.findAll()){
-            showListDtos.add(new ShowTechnicianDTO(
-                tech.getId(),
-                tech.getName(),
-                tech.getExpertise()));
-        }
-        return showListDtos;
+        return mapperService.toTechnicianListDTO(techRepo.findAll());
 	}
 
 	@Override

@@ -3,7 +3,6 @@ package org.example.wigellrepairs.dtos.services;
 import java.util.List;
 
 import org.example.wigellrepairs.dtos.technicians.ShowTechnicianDTO;
-import org.example.wigellrepairs.entities.RepairTicket;
 import org.example.wigellrepairs.enums.Expertise;
 
 public class ShowServiceAdminDTO extends ShowServiceTypeDTO {

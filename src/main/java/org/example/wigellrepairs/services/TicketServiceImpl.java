@@ -6,6 +6,7 @@ import java.util.List;
 import org.example.wigellrepairs.dtos.tickets.*;
 import org.example.wigellrepairs.entities.RepairTicket;
 import org.example.wigellrepairs.entities.ServiceType;
+import org.example.wigellrepairs.exceptions.InPastException;
 import org.example.wigellrepairs.exceptions.DidNotCancelInTimeException;
 import org.example.wigellrepairs.exceptions.ResourceNotFoundException;
 import org.example.wigellrepairs.exceptions.ServiceTimeUnavailableException;
@@ -37,14 +38,21 @@ public class TicketServiceImpl implements TicketService {
 
 	@Override
 	public ShowTicketDTO createTicket(BookTicketDTO dto) {
-        Checker.valueCheck(dto.getDate(), "date");
-        Checker.valueCheck(dto.getService(), "service");
+        long workTime = 2700; // 2700 = 45min
+        long curTime = timeService.getCurrentUTC();
+        String dateFormat = "yyyy-MM-dd HH:mm";
 
+        Checker.valueCheck(dto.getDate(), "date");
+        if(dto.getDate() < curTime) {
+            String time = timeService.formatted(dto.getDate(), dateFormat);
+            loggerService.error("User tried to book a new ticket in the past: " + time);
+            throw new InPastException("book a ticket", time);
+        }
+
+        Checker.valueCheck(dto.getService(), "service");
         ServiceType service = typeService.findExisting(dto.getService().getId());
 
         long bookDate = dto.getDate();
-        long workTime = 2700; // 2700 = 45min
-        String dateFormat = "yyyy-MM-dd HH:mm";
         String category = service.getCategory().name().toLowerCase();
         String formattedBookDate = timeService.formatted(bookDate, dateFormat);
 
@@ -91,6 +99,7 @@ public class TicketServiceImpl implements TicketService {
         RepairTicket ticket = findExisting(dto.getId());
 
         if(!authService.getUserName().equals(ticket.getCustomer())) {
+            loggerService.error("User tried to cancel a ticket that was not theirs");
             throw new UnauthorizedException("ticket");
         }
 
@@ -98,10 +107,13 @@ public class TicketServiceImpl implements TicketService {
         long cDate = timeService.getCurrentUTC();
         long day = 86400; // 24tim
         if(tTime + day < cDate){
-            throw new DidNotCancelInTimeException(timeService.formatted(tTime, "yyyy-MM-dd HH:mm"));
+            String time = timeService.formatted(tTime, "yyyy-MM-dd HH:mm");
+            loggerService.error("User did not cancel in time: " + time);
+            throw new DidNotCancelInTimeException(time);
         }
 
         ticket.setCanceled(true);
+        loggerService.info("User canceled " + ticket.getService().getName());
         return mapperService.toTicketDTO(ticketRepo.save(ticket));
 	}
 

@@ -99,10 +99,6 @@ public class DTOMapperServiceImpl implements DTOMapperService {
         return dtos;
 	}
 
-	// public CurrencyService getCurrencyService() {
-	// 	return currencyService;
-	// }
-
 	@Override
 	public List<ShowTechnicianDTO> toTechnicianListDTO(List<Technician> technicians) {
         List<ShowTechnicianDTO> dtos = new ArrayList<>();

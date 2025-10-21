@@ -20,13 +20,13 @@ spring:
 # conversion:
 #   api: http://convrt:8069/convert
 
-# logging:
-#   file:
-#     name: /logs/app.log
-#   level:
-#     root: INFO
-#   loggers:
-#     functionality:
-#       file: /logs/func.log
-#     errors:
-#       file: /logs/error.log
+logging:
+  file:
+    name: /logs/app.log
+  level:
+    root: INFO
+  loggers:
+    functionality:
+      file: /logs/func.log
+    errors:
+      file: /logs/error.log
